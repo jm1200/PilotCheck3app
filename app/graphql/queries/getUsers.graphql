@@ -1,0 +1,10 @@
+query GetUsers {
+  getUsers {
+    email
+    id
+    data {
+      id
+      directories
+    }
+  }
+}
