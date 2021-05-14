@@ -12,15 +12,7 @@ const client = new ApolloClient({
 });
 
 export default function App() {
-  return (
-    <ApolloProvider client={client}>
-      <View style={styles.container}>
-        <Text>test second edit</Text>
-        <StatusBar style="auto" />
-        <Test />
-      </View>
-    </ApolloProvider>
-  );
+  return <Providers />;
 }
 
 const styles = StyleSheet.create({
@@ -32,13 +24,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const Test = () => {
-  const { data } = useGetUsersQuery();
-  console.log("App.tsx 15 data:", data);
-  return (
-    // <View>
-    //   <Text>This is a test.</Text>
-    // </View>
-    <Providers />
-  );
-};
+// const Test = () => {
+//   const { data } = useGetUsersQuery();
+//   console.log("App.tsx 15 data:", data);
+//   return (
+//     // <View>
+//     //   <Text>This is a test.</Text>
+//     // </View>
+//     <Providers />
+//   );
+// };

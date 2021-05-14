@@ -1,15 +1,24 @@
 import React from "react";
-import { StyleSheet, View, ImageBackground } from "react-native";
+import { StyleSheet, View, ImageBackground, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { appStyles } from "../../config/appStyles";
 import { CustomText } from "../../components/basicComponents/CustomText";
 import { CustomButton } from "../../components/basicComponents/CustomButton";
-import { AuthNavigationProps } from "../../navigation/AuthNavigator";
+import {
+  AuthNavigationProps,
+  AuthNavigatorParamList,
+} from "../../navigation/AuthNavigator";
 import { routes } from "../../navigation/routes";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/core";
 
-interface WelcomeScreenProps {}
+export interface WelcomeScreenProps<T extends keyof AuthNavigatorParamList> {
+  navigation: StackNavigationProp<AuthNavigatorParamList, T>;
+}
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = () => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps<"WelcomeScreen">> = ({
+  navigation,
+}) => {
   return (
     <ImageBackground
       source={require("../../assets/runway.jpg")}
@@ -30,7 +39,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = () => {
           </View>
         </View>
 
-        {/* <View style={styles.buttons}>
+        <View style={styles.buttons}>
           <CustomButton
             containerStyles={styles.authButton}
             text="Login"
@@ -41,7 +50,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = () => {
             text="Register"
             onPress={() => navigation.navigate(routes.REGISTER_SCREEN)}
           />
-        </View> */}
+        </View>
       </View>
     </ImageBackground>
   );

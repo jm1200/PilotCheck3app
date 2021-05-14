@@ -8,11 +8,11 @@ import { CustomTextInputFormField } from "./formComponents/CustomTextInputFormFi
 import { registrationSchema as validationSchema } from "./validation";
 import { SubmitButton } from "./formComponents/SubmitButton";
 import { ErrorMessage } from "./formComponents/ErrorMessage";
+import { useRegisterMutation } from "../../generated/graphql";
 
 interface RegisterFormProps {}
 
 interface FormValues {
-  name: string;
   email: string;
   password: string;
 }
@@ -20,28 +20,30 @@ interface FormValues {
 export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   const navigation = useNavigation();
   const [error, setError] = useState("");
-  const handleSubmit: FormikConfig<FormValues>["onSubmit"] = (values) => {
-    console.log("TODO: Handle register");
+
+  const [register] = useRegisterMutation();
+  const handleSubmit: FormikConfig<FormValues>["onSubmit"] = async (values) => {
+    console.log("TODO: Handle register", values);
+
+    try {
+      let res = await register({ variables: { options: values } });
+
+      console.log("RegisterForm.tsx 32 res:", res);
+    } catch (error) {
+      console.log("RegisterForm.tsx 34 error:", error);
+    }
     // register(values.email, values.password)
     //   .then(() => navigation.navigate(routes.WELCOME_SCREEN))
     //   .catch((err) => setError("Their was an error with registration."));
 
-    navigation.navigate(routes.WELCOME_SCREEN);
+    // navigation.navigate(routes.WELCOME_SCREEN);
   };
   return (
     <CustomForm
-      initialValues={{ name: "", email: "", password: "" }}
+      initialValues={{ email: "", password: "" }}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
     >
-      <CustomTextInputFormField
-        name="name"
-        autoCapitalize="none"
-        textContentType="name"
-        placeholder="Name"
-        autoCorrect={false}
-        icon="account"
-      />
       <CustomTextInputFormField
         name="email"
         autoCapitalize="none"

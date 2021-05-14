@@ -17,6 +17,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   });
   // const firebase = useContext(FirebaseContext);
 
+  console.log("AuthProvider.tsx 20 meData:", meData);
+
   useEffect(() => {
     if (meData && meData.me && !meLoading) {
       setUser({

@@ -5,7 +5,6 @@ import { customNavigationTheme } from "../config/appStyles";
 import { navigationRef } from "../navigation/rootNavigation";
 import { AuthNavigator } from "../navigation/AuthNavigator";
 // import { AppNavigator } from "../navigation/AppNavigator";
-import { WelcomeScreen } from "./authScreens/WelcomeScreen";
 import { Text, View } from "react-native";
 
 interface AppEntryProps {}
@@ -13,6 +12,7 @@ interface AppEntryProps {}
 export const AppEntry: React.FC<AppEntryProps> = ({}) => {
   const user = useContext(AuthContext);
   const [Component, setComponent] = useState(<AuthNavigator />);
+  console.log("AppEntry.tsx 15 user:", user);
 
   //const Component = <WelcomeScreen />;
   useEffect(() => {

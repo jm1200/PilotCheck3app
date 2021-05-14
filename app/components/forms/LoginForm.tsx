@@ -19,7 +19,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
   const navigation = useNavigation();
   const [error, setError] = useState("");
   const handleSubmit: FormikConfig<FormValues>["onSubmit"] = (values) => {
-    console.log("TODO: handle login");
+    console.log("TODO: handle login", values);
     // login(values.email, values.password)
     //   .then(() => navigation.navigate(routes.WELCOME_SCREEN))
     //   .catch((err) =>

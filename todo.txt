@@ -1,3 +1,5 @@
 left off:
 
-app loading blank screen. check providers and see why nothing is loading.
+soemthing is loading now.. just not sure what. check all components by loading individually.
+
+why aren't there users? may have reset the database, but can't remember. try registering new user.
