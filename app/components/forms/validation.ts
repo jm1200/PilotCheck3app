@@ -25,10 +25,10 @@ export const addEditNoteSchema = Yup.object().shape({
 
 export const loginSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  password: Yup.string().required().min(3).label("Password"),
 });
 
 export const registrationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  password: Yup.string().required().min(3).label("Password"),
 });

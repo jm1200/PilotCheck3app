@@ -1,40 +1,46 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../providers/AuthProvider";
+import { useAuth } from "../providers/AuthProvider";
 import { customNavigationTheme } from "../config/appStyles";
 import { navigationRef } from "../navigation/rootNavigation";
 import { AuthNavigator } from "../navigation/AuthNavigator";
-// import { AppNavigator } from "../navigation/AppNavigator";
 import { Text, View } from "react-native";
+import { CustomButton } from "../components/basicComponents/CustomButton";
+import { MeDocument, MeQuery, useLogoutMutation } from "../generated/graphql";
+import * as SecureStore from "expo-secure-store";
 
 interface AppEntryProps {}
 
 export const AppEntry: React.FC<AppEntryProps> = ({}) => {
-  const user = useContext(AuthContext);
-  const [Component, setComponent] = useState(<AuthNavigator />);
+  const { user } = useAuth();
   console.log("AppEntry.tsx 15 user:", user);
-
-  //const Component = <WelcomeScreen />;
-  useEffect(() => {
-    if (user.loggedIn) {
-      setComponent(<ProtectedAuth />);
-    } else {
-      setComponent(<AuthNavigator />);
-    }
-  }, [user]);
 
   return (
     <NavigationContainer ref={navigationRef} theme={customNavigationTheme}>
-      {Component}
-      {/* {user.loggedIn ? <AppNavigator /> : <AuthNavigator />} */}
+      {user?.me ? <ProtectedAuth /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
 
 const ProtectedAuth = () => {
+  const [logout] = useLogoutMutation();
+  const handleLogout = async () => {
+    await logout({
+      update: (cache) => {
+        cache.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: null,
+          },
+        });
+      },
+    });
+  };
   return (
     <View>
       <Text>Logged in successfully@</Text>
+      <CustomButton text="Logout" onPress={handleLogout} />
     </View>
   );
 };

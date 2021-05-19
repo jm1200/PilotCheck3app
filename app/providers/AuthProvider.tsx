@@ -1,33 +1,104 @@
-import React, { createContext, useEffect, useState } from "react";
-import { useMeQuery } from "../generated/graphql";
-import { User } from "../types/types";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  EmailPasswordInput,
+  MeDocument,
+  MeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useMeQuery,
+  useRegisterMutation,
+} from "../generated/graphql";
+import { Signin, Signout, Signup, User } from "../types/types";
 
-export const AuthContext = createContext<User>({
-  loggedIn: false,
-  email: null,
-  uid: 0,
-});
-
-export const AuthProvider: React.FC = ({ children }) => {
+const useProvideAuth = () => {
   const { data: meData, loading: meLoading } = useMeQuery();
-  const [user, setUser] = useState<User>({
-    loggedIn: false,
-    email: null,
-    uid: 0,
-  });
-  // const firebase = useContext(FirebaseContext);
 
-  console.log("AuthProvider.tsx 20 meData:", meData);
+  const [me, setMe] = useState(meData);
 
   useEffect(() => {
-    if (meData && meData.me && !meLoading) {
-      setUser({
-        email: meData.me.email,
-        uid: meData.me.id,
-        loggedIn: true,
-      });
-    }
-  }, [meData, meLoading]);
+    setMe(meData);
+  }, [meData]);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  console.log("AuthProvider.tsx 13 meData:", meData);
+
+  // const firebase = useContext(FirebaseContext);
+
+  //Auth API
+  const [login] = useLoginMutation();
+  const [logout] = useLogoutMutation();
+  const [register] = useRegisterMutation();
+
+  const signin = async (values: EmailPasswordInput) => {
+    const response = await login({
+      variables: values,
+      update: (cache, { data }) => {
+        cache.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: data?.login.user,
+          },
+        });
+        //   cache.evict({ fieldName: "posts:{}" });
+      },
+    });
+
+    return response;
+  };
+
+  const signup = async (values: EmailPasswordInput) => {
+    const response = await register({
+      variables: { options: values },
+      update: (cache, { data }) => {
+        cache.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: data?.register.user,
+          },
+        });
+      },
+    });
+    return response;
+  };
+
+  const signout = () => {
+    setMe({
+      __typename: "Query",
+      me: null,
+    });
+    logout();
+  };
+
+  return {
+    user: me,
+    loadingAuth: meLoading,
+    signin,
+    signout,
+    signup,
+  };
+};
+
+interface AuthContext {
+  user: MeQuery | undefined;
+  loadingAuth: boolean;
+  signin?: Signin;
+  signup?: Signup;
+  signout?: Signout;
+}
+
+const defaultAuthContext: AuthContext = {
+  loadingAuth: false,
+  user: undefined,
+};
+
+const authContext = createContext<AuthContext>(defaultAuthContext);
+
+export const AuthProvider: React.FC = ({ children }) => {
+  const auth = useProvideAuth();
+  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+};
+
+export const useAuth = () => {
+  return useContext(authContext);
 };

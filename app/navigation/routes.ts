@@ -1,5 +1,6 @@
 type Routes = {
   WELCOME_SCREEN: "WelcomeScreen";
+  AUTHORIZED_HOME_SCREEN: "AuthorizedHomeScreen";
   //TABS
   CHECKLIST_NAVIGATOR: "ChecklistsNavigator";
   MEMORY_ITEMS_SCREEN: "MemoryItemsScreen";
@@ -35,6 +36,7 @@ type Routes = {
 
 export const routes = Object.freeze<Routes>({
   WELCOME_SCREEN: "WelcomeScreen",
+  AUTHORIZED_HOME_SCREEN: "AuthorizedHomeScreen",
   //TABS
   CHECKLIST_NAVIGATOR: "ChecklistsNavigator",
   MEMORY_ITEMS_SCREEN: "MemoryItemsScreen",

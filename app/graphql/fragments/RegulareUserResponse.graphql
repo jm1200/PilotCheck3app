@@ -1,4 +1,5 @@
 fragment RegularUserResponse on UserResponse {
+  sessionId
   errors {
     ...RegularError
   }

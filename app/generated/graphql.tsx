@@ -76,6 +76,7 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
+  sessionId?: Maybe<Scalars['String']>;
 };
 
 export type RegularErrorFragment = (
@@ -94,6 +95,7 @@ export type RegularUserFragment = (
 
 export type RegularUserResponseFragment = (
   { __typename?: 'UserResponse' }
+  & Pick<UserResponse, 'sessionId'>
   & { errors?: Maybe<Array<(
     { __typename?: 'FieldError' }
     & RegularErrorFragment
@@ -206,6 +208,7 @@ export const RegularUserFragmentDoc = gql`
     `;
 export const RegularUserResponseFragmentDoc = gql`
     fragment RegularUserResponse on UserResponse {
+  sessionId
   errors {
     ...RegularError
   }

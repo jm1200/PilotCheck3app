@@ -7,6 +7,9 @@ import { CustomTextInputFormField } from "./formComponents/CustomTextInputFormFi
 import { SubmitButton } from "./formComponents/SubmitButton";
 import { ErrorMessage } from "./formComponents/ErrorMessage";
 import { loginSchema as validationSchema } from "./validation";
+import { MeDocument, MeQuery, useLoginMutation } from "../../generated/graphql";
+import { routes } from "../../navigation/routes";
+import { useAuth } from "../../providers/AuthProvider";
 
 interface LoginFormProps {}
 
@@ -17,16 +20,20 @@ interface FormValues {
 
 export const LoginForm: React.FC<LoginFormProps> = ({}) => {
   const navigation = useNavigation();
+  const { signin } = useAuth();
   const [error, setError] = useState("");
-  const handleSubmit: FormikConfig<FormValues>["onSubmit"] = (values) => {
-    console.log("TODO: handle login", values);
-    // login(values.email, values.password)
-    //   .then(() => navigation.navigate(routes.WELCOME_SCREEN))
-    //   .catch((err) =>
-    //     setError(
-    //       "Their was an error logging in. Please check your email or password and try again"
-    //     )
-    //   );
+  const handleSubmit: FormikConfig<FormValues>["onSubmit"] = async (values) => {
+    try {
+      const response = await signin!(values);
+
+      if (response.data?.login.errors) {
+        setError("error");
+      } else if (response.data?.login.user) {
+        navigation.navigate(routes.WELCOME_SCREEN);
+      }
+    } catch (error) {
+      console.log("LoginForm.tsx 28 error:", error);
+    }
   };
   return (
     <CustomForm
