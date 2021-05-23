@@ -14,5 +14,3 @@ export const Providers: React.FC = () => {
     </>
   );
 };
-
-//left off before making welcom screen nd login pages...
