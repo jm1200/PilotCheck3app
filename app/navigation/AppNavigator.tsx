@@ -7,6 +7,7 @@ import { AccountScreen } from "../screens/accountTab/AccountScreen";
 // import { NotesEntryScreen } from "../screens/appScreens/NotesEntryScreen";
 // import { MemoryItemsEntryScreen } from "../screens/appScreens/MemoryItemsEntryScreen";
 import { AppStateContext } from "../providers/AppStateProvider";
+import { Checklists } from "../screens/checklistsTab/Checklists";
 // import {
 //   getFirstNotesFolderTitles,
 //   getFirstChecklistFolderTitles,
@@ -69,8 +70,8 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({}) => {
             />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name={routes.MEMORY_ITEMS_SCREEN}
         component={MemoryItemsEntryScreen}
         listeners={{
@@ -115,6 +116,20 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({}) => {
           ),
         }}
       /> */}
+      <Tabs.Screen
+        name={routes.CHECKLIST_NAVIGATOR}
+        component={Checklists}
+        options={{
+          tabBarLabel: "Checklists",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="format-list-checkbox"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
       <Tabs.Screen
         name={routes.ACCOUNT_SCREEN}
         component={AccountScreen}
