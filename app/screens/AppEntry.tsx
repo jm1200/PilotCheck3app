@@ -4,10 +4,9 @@ import { useAuth } from "../providers/AuthProvider";
 import { customNavigationTheme } from "../config/appStyles";
 import { navigationRef } from "../navigation/rootNavigation";
 import { AuthNavigator } from "../navigation/AuthNavigator";
-import { Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { CustomButton } from "../components/basicComponents/CustomButton";
-import { MeDocument, MeQuery, useLogoutMutation } from "../generated/graphql";
-import * as SecureStore from "expo-secure-store";
+import { AppNavigator } from "../navigation/AppNavigator";
 
 interface AppEntryProps {}
 
@@ -17,30 +16,20 @@ export const AppEntry: React.FC<AppEntryProps> = ({}) => {
 
   return (
     <NavigationContainer ref={navigationRef} theme={customNavigationTheme}>
-      {user?.me ? <ProtectedAuth /> : <AuthNavigator />}
+      {user?.me ? <AppNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
 
-const ProtectedAuth = () => {
-  const [logout] = useLogoutMutation();
-  const handleLogout = async () => {
-    await logout({
-      update: (cache) => {
-        cache.writeQuery<MeQuery>({
-          query: MeDocument,
-          data: {
-            __typename: "Query",
-            me: null,
-          },
-        });
-      },
-    });
-  };
-  return (
-    <View>
-      <Text>Logged in successfully@</Text>
-      <CustomButton text="Logout" onPress={handleLogout} />
-    </View>
-  );
-};
+// const ProtectedAuth = () => {
+//   const { signout } = useAuth();
+//   const handleLogout = async () => {
+//     signout!();
+//   };
+//   return (
+//     <SafeAreaView>
+//       <Text>Logged in successfully@</Text>
+//       <CustomButton text="Logout" onPress={handleLogout} />
+//     </SafeAreaView>
+//   );
+// };

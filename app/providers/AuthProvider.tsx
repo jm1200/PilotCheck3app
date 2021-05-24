@@ -19,8 +19,6 @@ const useProvideAuth = () => {
     setMe(meData);
   }, [meData]);
 
-  console.log("AuthProvider.tsx 13 meData:", meData);
-
   // const firebase = useContext(FirebaseContext);
 
   //Auth API
@@ -62,12 +60,23 @@ const useProvideAuth = () => {
     return response;
   };
 
-  const signout = () => {
+  const signout = async () => {
     setMe({
       __typename: "Query",
       me: null,
     });
-    logout();
+
+    await logout({
+      update: (cache) => {
+        cache.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: null,
+          },
+        });
+      },
+    });
   };
 
   return {
